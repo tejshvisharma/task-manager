@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./server
+    container_name: backend
+    restart: always
+    env_file:
+      - ./server/.env
+    environment:
+      MONGO_URI: mongodb://root:secret@mongo:27017/mydb?authSource=admin
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+
+volumes:
+  mongo_data:
