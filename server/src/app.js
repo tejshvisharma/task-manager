@@ -36,7 +36,7 @@ app.use(express.static("public"));
 import healthCheckRouter from "./routes/healthCheck.router.js";
 import taskRouter from "./routes/task.router.js";
 
-app.use("/api/v1/healthcheck", healthCheckRouter);
+app.use("/healthcheck", healthCheckRouter);
 app.use("/tasks", taskRouter);
 
 app.use((req, res) => {

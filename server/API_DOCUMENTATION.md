@@ -1,11 +1,13 @@
 # Task Manager API Documentation
 
 Base URL:
+
 - Local: `http://localhost:5000`
 
 ## Common Response Format
 
 Success response:
+
 ```json
 {
   "success": true,
@@ -16,6 +18,7 @@ Success response:
 ```
 
 Validation or error response:
+
 ```json
 {
   "success": false,
@@ -45,12 +48,31 @@ type Task = {
 
 ## Endpoints
 
+### 0) Healthcheck
+
+- Method: `GET`
+- Endpoint: `/healthcheck`
+- Description: Returns server health status.
+
+Success example:
+
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Server is up and running",
+  "data": null
+}
+```
+
 ### 1) Get all tasks
+
 - Method: `GET`
 - Endpoint: `/tasks`
 - Description: Returns all tasks in descending order of creation time.
 
 Success example:
+
 ```json
 {
   "success": true,
@@ -70,11 +92,13 @@ Success example:
 ```
 
 ### 2) Create a task
+
 - Method: `POST`
 - Endpoint: `/tasks`
 - Description: Creates a new task.
 
 Request body:
+
 ```json
 {
   "title": "Finish assignment"
@@ -82,11 +106,13 @@ Request body:
 ```
 
 Validation rules:
+
 - `title` is required.
 - `title` must be a string.
 - `title` length must be between 1 and 200.
 
 Success example:
+
 ```json
 {
   "success": true,
@@ -104,11 +130,13 @@ Success example:
 ```
 
 ### 3) Update task status
+
 - Method: `PATCH`
 - Endpoint: `/tasks/:id`
 - Description: Updates only the `completed` status of a task.
 
 Request body:
+
 ```json
 {
   "completed": true
@@ -116,11 +144,13 @@ Request body:
 ```
 
 Validation rules:
+
 - `id` must be a valid MongoDB ObjectId.
 - `completed` is required.
 - `completed` must be a boolean.
 
 Success example:
+
 ```json
 {
   "success": true,
@@ -138,14 +168,17 @@ Success example:
 ```
 
 ### 4) Delete task
+
 - Method: `DELETE`
 - Endpoint: `/tasks/:id`
 - Description: Deletes a task.
 
 Validation rules:
+
 - `id` must be a valid MongoDB ObjectId.
 
 Success example:
+
 ```json
 {
   "success": true,
@@ -156,6 +189,7 @@ Success example:
 ```
 
 ## Status Codes
+
 - `200`: Success for fetch, update, and delete.
 - `201`: Success for create.
 - `400`: Validation error.
