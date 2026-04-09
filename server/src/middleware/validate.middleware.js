@@ -1,21 +1,14 @@
 import { validationResult } from "express-validator";
 import ApiError from "../utils/ApiError.js";
-const validate = (req, res, next) => {
+
+const validate = (req, _res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    // Convert errors into an array of objects
-    const extractedErrors = errors.array().map((err) => ({
-      field: err.path,
-      message: err.msg,
-    }));
-
-    // Pass error to global error handler
-    return next(
-      new ApiError(422, "Received data is not valid", extractedErrors),
-    );
+    return next(new ApiError(400, "Validation failed", errors.array()));
   }
-  next();
+
+  return next();
 };
 
 export default validate;

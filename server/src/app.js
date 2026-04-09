@@ -10,13 +10,21 @@ import errorHandler from "./middleware/ErrorHandler.middleware.js";
 
 const app = express();
 
-const API_BASE_URL = process.env.API_BASE_URL;
+const rawClientUrl = process.env.CLIENT_URL || process.env.API_BASE_URL;
+const allowedOrigin = (() => {
+  if (!rawClientUrl) return "http://localhost:5173";
+  try {
+    return new URL(rawClientUrl).origin;
+  } catch {
+    return rawClientUrl;
+  }
+})();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   cors({
-    origin: [API_BASE_URL],
+    origin: [allowedOrigin],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
