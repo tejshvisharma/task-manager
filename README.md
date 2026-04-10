@@ -128,6 +128,17 @@ To stop and remove volume data as well:
 docker compose down -v
 ```
 
+## Tests
+
+Basic API tests are included for the backend (create, list, update, delete, and validation behavior).
+
+Run tests:
+
+```bash
+cd server
+npm test
+```
+
 ## API Endpoints
 
 | Method | Endpoint   | Description                 |
@@ -168,7 +179,7 @@ Error response shape:
 - The assignment was intentionally time-boxed, so I prioritized clarity over adding many abstractions.
 - I used MongoDB for persistence instead of in-memory storage to reflect a realistic API setup.
 - The UI is intentionally minimal; behavior and reliability were prioritized over advanced design.
-- Basic testing is not included in this version due to scope/time trade-off.
+- Test coverage is intentionally basic and focused on backend API flows for this assignment scope.
 - Client persistence via localStorage is included for UX convenience, even though server data is the source of truth.
 
 ## Notes
