@@ -5,7 +5,7 @@ import {
   createTask,
   deleteTask,
   getTasks,
-  updateTaskStatus,
+  updateTask,
 } from "../controllers/task.controller.js";
 import validate from "../middleware/validate.middleware.js";
 
@@ -35,15 +35,32 @@ taskRouter.patch(
   "/:id",
   [
     param("id").isMongoId().withMessage("Invalid task id"),
+    body("title")
+      .optional()
+      .isString()
+      .withMessage("Title must be a string")
+      .bail()
+      .trim()
+      .isLength({ min: 1, max: 200 })
+      .withMessage("Title must be between 1 and 200 characters"),
     body("completed")
-      .exists()
-      .withMessage("Completed status is required")
+      .optional()
       .bail()
       .isBoolean()
       .withMessage("Completed must be boolean"),
+    body().custom((value) => {
+      const hasTitle = typeof value?.title !== "undefined";
+      const hasCompleted = typeof value?.completed !== "undefined";
+
+      if (!hasTitle && !hasCompleted) {
+        throw new Error("At least one of title or completed is required");
+      }
+
+      return true;
+    }),
   ],
   validate,
-  updateTaskStatus,
+  updateTask,
 );
 
 taskRouter.delete(

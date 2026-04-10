@@ -129,24 +129,28 @@ Success example:
 }
 ```
 
-### 3) Update task status
+### 3) Update task
 
 - Method: `PATCH`
 - Endpoint: `/tasks/:id`
-- Description: Updates only the `completed` status of a task.
+- Description: Updates task fields (`title`, `completed`) by id.
 
 Request body:
 
 ```json
 {
+  "title": "Finish assignment docs",
   "completed": true
 }
 ```
 
+You can send only `title`, only `completed`, or both.
+
 Validation rules:
 
 - `id` must be a valid MongoDB ObjectId.
-- `completed` is required.
+- At least one of `title` or `completed` is required.
+- `title` must be a string with length between 1 and 200.
 - `completed` must be a boolean.
 
 Success example:
@@ -155,7 +159,7 @@ Success example:
 {
   "success": true,
   "statusCode": 200,
-  "message": "Task status updated successfully",
+  "message": "Task updated successfully",
   "data": {
     "task": {
       "id": "67f6b8f5f1d7f31f8bcf0001",

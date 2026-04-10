@@ -19,23 +19,44 @@ const createTask = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, { task }, "Task created successfully"));
 });
 
-const updateTaskStatus = asyncHandler(async (req, res) => {
+const updateTask = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { completed } = req.body;
+  const { completed, title } = req.body;
 
-  const task = await Task.findByIdAndUpdate(
-    id,
-    { completed },
-    { new: true, runValidators: true },
-  );
+  const updateData = {};
+
+  if (typeof completed === "boolean") {
+    updateData.completed = completed;
+  }
+
+  if (typeof title === "string") {
+    updateData.title = title.trim();
+  }
+
+  const task = await Task.findByIdAndUpdate(id, updateData, {
+    new: true,
+    runValidators: true,
+  });
 
   if (!task) {
     throw new ApiError(404, "Task not found");
   }
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, { task }, "Task status updated successfully"));
+  let message = "Task updated successfully";
+
+  if (
+    Object.prototype.hasOwnProperty.call(updateData, "title") &&
+    !Object.prototype.hasOwnProperty.call(updateData, "completed")
+  ) {
+    message = "Task title updated successfully";
+  } else if (
+    Object.prototype.hasOwnProperty.call(updateData, "completed") &&
+    !Object.prototype.hasOwnProperty.call(updateData, "title")
+  ) {
+    message = "Task status updated successfully";
+  }
+
+  return res.status(200).json(new ApiResponse(200, { task }, message));
 });
 
 const deleteTask = asyncHandler(async (req, res) => {
@@ -51,4 +72,4 @@ const deleteTask = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Task deleted successfully"));
 });
 
-export { getTasks, createTask, updateTaskStatus, deleteTask };
+export { getTasks, createTask, updateTask, deleteTask };
