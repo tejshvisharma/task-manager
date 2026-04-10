@@ -8,6 +8,19 @@ import {
 } from "./api";
 import "./App.css";
 
+const profileLinks = [
+  {
+    label: "See My Portfolio",
+    href: "https://mahatejshvi-vareny-swami-portfolio.vercel.app/",
+  },
+  { label: "Resume", href: "https://mahatejshvi.tiiny.site/" },
+  { label: "GitHub", href: "https://github.com/tejshvisharma" },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/mahatejshvi-vareny-swami/",
+  },
+];
+
 function App() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -118,6 +131,20 @@ function App() {
   return (
     <div className="app">
       <h1>Task Manager</h1>
+
+      <div className="profile-links" aria-label="Profile links">
+        {profileLinks.map((link) => (
+          <a
+            key={link.label}
+            className="profile-link"
+            href={link.href}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
 
       <form className="task-form" onSubmit={handleAddTask}>
         <input
