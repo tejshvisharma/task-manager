@@ -26,11 +26,21 @@ services:
       - ./server/.env
     environment:
       MONGO_URI: mongodb://root:secret@mongo:27017/mydb?authSource=admin
+      CLIENT_URL: http://localhost:5173
     depends_on:
       mongo:
         condition: service_healthy
     ports:
       - "5000:5000"
+
+  frontend:
+    build: ./client
+    container_name: frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
 
 volumes:
   mongo_data:
